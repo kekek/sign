@@ -9,14 +9,21 @@ import (
 )
 
 type Url struct {
-	Path  string
-	Query url.Values
+	Path                 string
+	Query                url.Values
+	signKeyName          string // 签名key
+	timestampName        string
+	toSignParamsNameList []string // 待签名的参数名称
 }
 
-func NewUrl(rawUrl string, options ...func(*Url)) (*Url, error) {
-	s := &Url{}
+func NewUrl(rawUrl string, opts ...Option) (*Url, error) {
+	s := &Url{
+		signKeyName:          "sign",
+		timestampName:        "ts",
+		toSignParamsNameList: []string{"id", "name"},
+	}
 
-	for _, opt := range options {
+	for _, opt := range opts {
 		opt(s)
 	}
 
@@ -36,8 +43,8 @@ func NewUrl(rawUrl string, options ...func(*Url)) (*Url, error) {
 		return s, err
 	}
 
-	if !vals.Has("sign") { // 有签名字段，就不添加时间戳
-		vals.Add("ts", fmt.Sprintf("%d", time.Now().Unix()))
+	if !vals.Has(s.signKeyName) { // 有签名字段，就不添加时间戳
+		vals.Add(s.timestampName, fmt.Sprintf("%d", time.Now().Unix()))
 	}
 
 	s.Path = ex[0]
@@ -46,14 +53,14 @@ func NewUrl(rawUrl string, options ...func(*Url)) (*Url, error) {
 	return s, nil
 }
 
-func (u *Url) GetToSignStr(signKeyList []string) string {
-	params := u.getSubResource(signKeyList)
+func (u *Url) GetToSignStr() string {
+	params := u.getSubResource()
 	return fmt.Sprintf(u.Path+"?%s", params)
 }
 
-func (u *Url) GetSignedUrl(keyName, val string, signKeyList []string) string {
-	params := u.getSubResource(signKeyList)
-	return fmt.Sprintf(u.Path+"?%s&%s=%s", params, keyName, val)
+func (u *Url) GetSignedUrl(val string) string {
+	params := u.getSubResource()
+	return fmt.Sprintf(u.Path+"?%s&%s=%s", params, u.signKeyName, val)
 }
 
 func (u *Url) isParamSign(paramKey string, signKeyList []string) bool {
@@ -65,12 +72,15 @@ func (u *Url) isParamSign(paramKey string, signKeyList []string) bool {
 	return false
 }
 
-func (u *Url) getSubResource(signKeyList []string) string {
+func (u *Url) getSubResource() string {
 	// Sort
 	params := u.Query
 	res := url.Values{}
 	for k := range params {
-		if u.isParamSign(k, signKeyList) {
+		if k == u.signKeyName {
+			continue
+		}
+		if u.isParamSign(k, u.toSignParamsNameList) {
 			if params[k] != nil {
 				res[k] = params[k]
 			}
@@ -79,7 +89,15 @@ func (u *Url) getSubResource(signKeyList []string) string {
 	return res.Encode()
 }
 
-func (u *Url) GetParams(key string) string {
+func (u *Url) GetTimestamp() string {
+	return u.getParams(u.timestampName)
+}
+
+func (u *Url) GetSign() string {
+	return u.getParams(u.signKeyName)
+}
+
+func (u *Url) getParams(key string) string {
 	// Sort
 	return u.Query.Get(key)
 }
