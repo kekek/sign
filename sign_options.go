@@ -4,12 +4,6 @@ type SignatureOption func(*Signature)
 
 type SignFunc func(string, string) string
 
-func WithSecret(s string) SignatureOption {
-	return func(o *Signature) {
-		o.Secret = s
-	}
-}
-
 func WithSignFunc(f SignFunc) SignatureOption {
 	return func(o *Signature) {
 		o.SignFunc = f
