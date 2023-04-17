@@ -1,0 +1,6 @@
+github.com/bwmarrin/go-alone v0.0.0-20190806015146-742bb55d1631 h1:Xb5rra6jJt5Z1JsZhIMby+IP5T8aU+Uc2RC9RzSxs9g=
+github.com/bwmarrin/go-alone v0.0.0-20190806015146-742bb55d1631/go.mod h1:P86Dksd9km5HGX5UMIocXvX87sEp2xUARle3by+9JZ4=
+golang.org/x/crypto v0.8.0 h1:pd9TJtTueMTVQXzk8E2XESSMQDj/U7OUu0PqJqPXQjQ=
+golang.org/x/crypto v0.8.0/go.mod h1:mRqEX+O9/h5TFCrQhkgjo2yKi0yYA+9ecGkdQoHrywE=
+golang.org/x/sys v0.7.0 h1:3jlCCIQZPdOYu1h8BkNvLz8Kgwtae2cagcG/VamtZRU=
+golang.org/x/sys v0.7.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
