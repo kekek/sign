@@ -40,3 +40,14 @@ func TestSignature_SignURL(t *testing.T) {
 		})
 	}
 }
+
+func BenchmarkSignURL(b *testing.B) {
+
+	s := defaultSignature
+
+	data := "http://sr-report-test.zljgp.com/pdf/1681463647835_13724_LoadRunner_Winsocket协议知识总结V1[1].1(修正版).pdf?id=23657228271226880&age=18&name=ll"
+
+	for n := 0; n < b.N; n++ {
+		s.SignURL(data) // run fib(30) b.N times
+	}
+}
