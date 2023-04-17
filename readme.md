@@ -11,8 +11,9 @@ Sign 用于对url进行签名和验证。
 
 ### Features
 
-- 配置签名参数的名称
-- 配置参与签名的参数列表
+- 可自定签名参数key
+- 可配置参与签名的参数返回
+- 可自定签名函数
 
 ### Usage 
 
@@ -68,4 +69,4 @@ url := "https://example.com/test?id=1&age=1"
 
 - https://github.com/tsawler/signer
 
-上面这个库，有坑，签名后，path中的反斜线会被删除
+上面这个库，有坑，签名后，path中的反斜线会被删除；本人修改了一版，在本项目的分支：signer
