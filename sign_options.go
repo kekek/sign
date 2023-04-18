@@ -2,8 +2,6 @@ package sign
 
 type SignatureOption func(*Signature)
 
-type SignFunc func(string, string) string
-
 func WithSignFunc(f SignFunc) SignatureOption {
 	return func(o *Signature) {
 		o.SignFunc = f

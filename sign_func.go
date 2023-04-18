@@ -11,6 +11,17 @@ import (
 	"io"
 )
 
+type SignFunc func(string, string) string
+
+//func ShaTest() SignFunc {
+//	return func(toSignUrl, secret string) string {
+//		h := hmac.New(func() hash.Hash { return sha256.New() }, []byte(secret))
+//		io.WriteString(h, toSignUrl)
+//		signedStr := base64.StdEncoding.EncodeToString(h.Sum(nil))
+//		return signedStr
+//	}
+//}
+
 func SignStrSha256(toSignUrl, secret string) string {
 	h := hmac.New(func() hash.Hash { return sha256.New() }, []byte(secret))
 	io.WriteString(h, toSignUrl)
